@@ -1,0 +1,190 @@
+﻿@model Horario
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Proyecto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/JavaScriptHorario.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+        <div asp-validation-summary="ModelOnly" class="mb-4"></div>
+        @if (TempData.ContainsKey("SuccessMessage"))
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData.ContainsKey("ErrorMessage"))
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <form asp-action="AgregarHorario" class="mb-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <!-- Campo ID del espacio -->
+                    <div class="form-group">
+                        <label asp-for="id_esp">ID Espacio</label>
+                        <select id="selectidespacio" asp-for="id_esp" class="form-select">
+                            @foreach (var espacio in Model.ListaDeEspacios)
+                            {
+                                <option value="@espacio.id_esp">
+                                    @espacio.id_esp
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="id_esp" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campo Nombre del espacio -->
+                    <div class="form-group">
+                        <label asp-for="nom_esp">Nombre Espacio</label>
+                        <input id="selectnombreespacio" asp-for="nom_esp" class="form-control" readonly />
+                        <span asp-validation-for="nom_esp" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campo Hora de entrada -->
+                    <div class="form-group">
+                        <label asp-for="hora_entrada">Hora de entrada</label>
+                        <input type="time" asp-for="hora_entrada" class="form-control">
+                        <span asp-validation-for="hora_entrada" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campo Hora de salida -->
+                    <div class="form-group">
+                        <label asp-for="hora_salida">Hora de salida</label>
+                        <input type="time" asp-for="hora_salida" class="form-control">
+                        <span asp-validation-for="hora_salida" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campo Día -->
+                    <div class="form-group">
+                        <label asp-for="dia">Día</label>
+                        <select asp-for="dia" class="form-select">
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miercoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sabado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                        <span asp-validation-for="dia" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campo ID del horario -->
+                    <div class="form-group">
+                        <label asp-for="id">ID del horario</label>
+                        <input type="text" asp-for="id" class="form-control">
+                        <span asp-validation-for="id" class="text-danger"></span>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                        <button type="submit" class="btn btn-danger" formaction="BorrarHorario">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Tabla para mostrar los espacios -->
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID del bloque</th>
+                    <th>ID Espacio</th>
+                    <th>Nombre del espacio</th>
+                    <th>Hora de entrada</th>
+                    <th>Hora de salida</th>
+                    <th>Día</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ListaDeHorarios == null || !Model.ListaDeHorarios.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">NO HAY NADA PARA MOSTRAR</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var espacio in Model.ListaDeHorarios)
+                    {
+                        <tr>
+                            <td>@espacio.id</td>
+                            <td>@espacio.id_esp</td>
+                            <td>@espacio.nom_esp</td>
+                            <td>@espacio.hora_entrada.ToString("hh':'mm")</td>
+                            <td>@espacio.hora_salida.ToString("hh':'mm")</td>
+                            <td>@espacio.dia</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var Espacios = @Html.Raw(Json.Serialize(Model.ListaDeEspacios));
+            console.log(Espacios);
+            var selectIdEspacio = document.querySelector("#selectidespacio");
+            var selectNombreEspacio = document.querySelector("#selectnombreespacio");
+
+            function updateNombreEspacio() {
+                Espacios.forEach(function (espacio) {
+                    if (selectIdEspacio.value == espacio.id_esp) {
+                        selectNombreEspacio.value = espacio.nom_esp;
+                    }
+                });
+            }
+
+            updateNombreEspacio();
+
+            selectIdEspacio.addEventListener("change", updateNombreEspacio);
+        });
+    </script>
+</body>
+</html>
+<!--SCRIPT JS PARA CAMBIAR AUTOMATICAMENTE EL VALOR DEL INPUT DE NOMBRE ESPACIO DEPENDIENDO SU ID ESPACIO
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var Espacios = @Html.Raw(Json.Serialize(Model.ListaDeEspacios));
+        console.log(Espacios)
+        var selectIdEspacio = document.querySelector("#selectidespacio");
+        var selectNombreEspacio = document.querySelector("#selectnombreespacio");
+
+
+        function updateNombreEspacio() {
+            Espacios.forEach(function (espacio) {
+                if (selectIdEspacio.value == espacio.id_esp) {
+                    selectNombreEspacio.value = espacio.nom_esp;
+                }
+            });
+        }
+
+        updateNombreEspacio();
+
+        selectIdEspacio.addEventListener("change", updateNombreEspacio);
+    });
+</script>
+-->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+}
+
+
+
+
+

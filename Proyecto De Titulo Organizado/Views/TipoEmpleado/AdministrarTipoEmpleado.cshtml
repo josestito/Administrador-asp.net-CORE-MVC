@@ -1,0 +1,75 @@
+﻿@model TipoEmpleado
+
+@{
+    ViewData["Title"] = "Administrar tipo de trabajador";
+}
+
+<div>
+    <div>
+        <h1 class="text-center">@ViewData["Title"]</h1>
+
+        <div class="container">
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <!-- Mensaje de éxito si existe -->
+            @if (TempData.ContainsKey("SuccessMessage"))
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData.ContainsKey("ErrorMessage"))
+            {
+                <div class="alert alert-danger" role="alert">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <form asp-action="AgregarTipoTrabajador">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <!-- Campo Tipo de Trabajador -->
+                        <div class="form-group">
+                            <label asp-for="rol_emp">Tipo Trabajador</label>
+                            <input placeholder="Ingrese el tipo de trabajador que desea agregar" asp-for="rol_emp" class="form-control" />
+                            <span asp-validation-for="rol_emp" class="text-danger"></span>
+                        </div>
+
+                        <!-- Botón de agregar -->
+                        <button type="submit" class="btn btn-primary btn-block mt-2">Agregar</button>
+                        <button type="submit" class="btn btn-danger btn-block mt-2" formaction="BorraTipoTrabajador">Borrar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nombre del tipo trabajador</th>
+                <th scope="col">ID del tipo trabajador</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListaTipoEmpleado == null || !Model.ListaTipoEmpleado.Any())
+            {
+                <tr>
+                    <td colspan="2">NO HAY NADA PARA MOSTRAR</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var tipoTrabajador in Model.ListaTipoEmpleado)
+                {
+                    <tr>
+                        <td>@tipoTrabajador.rol_emp</td>
+                        <td>@tipoTrabajador.tipo_empleado_id</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>

@@ -1,0 +1,36 @@
+﻿@model Empleado
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Rut</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido Paterno</th>
+            <th scope="col">Apellido Materno</th>
+            <th scope="col">Contraseña</th>
+            <th scope="col">ID del Tipo de Trabajador</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ListaDeEmpleados == null || !Model.ListaDeEmpleados.Any())
+        {
+            <tr>
+                <td colspan="6">NO HAY NADA PARA MOSTRAR</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var trabajador in Model.ListaDeEmpleados)
+            {
+                <tr>
+                    <td>@trabajador.rut</td>
+                    <td>@trabajador.nombre</td>
+                    <td>@trabajador.apellido_p</td>
+                    <td>@trabajador.apellido_m</td>
+                    <td>@trabajador.contra_emp</td>
+                    <td>@trabajador.tipo_empleado_tipo_empleado_id</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

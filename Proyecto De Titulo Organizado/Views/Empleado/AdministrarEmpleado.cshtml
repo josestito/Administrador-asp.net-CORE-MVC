@@ -1,0 +1,142 @@
+﻿@model Empleado
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administración de Empleados - Proyecto_De_Titulo_Organizado</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/JavaScriptEmpleado.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card mt-5 shadow-sm">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Administración de Empleados</h1>
+
+                        <!-- Mensajes de éxito/error -->
+                        @if (TempData.ContainsKey("SuccessMessage"))
+                        {
+                            <div class="alert alert-success" role="alert">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
+                        @if (TempData.ContainsKey("ErrorMessage"))
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+
+                        <form asp-action="AgregarEmpleado">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                            <!-- RUT del Trabajador -->
+                            <div class="mb-3">
+                                <label asp-for="rut" class="form-label">RUT del Trabajador</label>
+                                <input placeholder="Ingrese el RUT del trabajador" asp-for="rut" class="form-control" />
+                                <span asp-validation-for="rut" class="text-danger"></span>
+                            </div>
+
+                            <!-- Nombre del Trabajador -->
+                            <div class="mb-3">
+                                <label asp-for="nombre" class="form-label">Nombre del Trabajador</label>
+                                <input placeholder="Ingrese el Nombre del trabajador" asp-for="nombre" class="form-control" />
+                                <span asp-validation-for="nombre" class="text-danger"></span>
+                            </div>
+
+                            <!-- Apellido Paterno del Trabajador -->
+                            <div class="mb-3">
+                                <label asp-for="apellido_p" class="form-label">Apellido Paterno del Trabajador</label>
+                                <input placeholder="Ingrese el apellido paterno del trabajador" asp-for="apellido_p" class="form-control" />
+                                <span asp-validation-for="apellido_p" class="text-danger"></span>
+                            </div>
+
+                            <!-- Apellido Materno del Trabajador -->
+                            <div class="mb-3">
+                                <label asp-for="apellido_m" class="form-label">Apellido Materno del Trabajador</label>
+                                <input placeholder="Ingrese el apellido materno del trabajador" asp-for="apellido_m" class="form-control" />
+                                <span asp-validation-for="apellido_m" class="text-danger"></span>
+                            </div>
+
+                            <!-- Contraseña del Trabajador -->
+                            <div class="mb-3">
+                                <label asp-for="contra_emp" class="form-label">Contraseña del Trabajador</label>
+                                <input type="password" placeholder="Ingrese la contraseña del trabajador" asp-for="contra_emp" class="form-control" />
+                                <span asp-validation-for="contra_emp" class="text-danger"></span>
+                            </div>
+
+                            <!-- Tipo de Trabajador -->
+                            <div class="mb-3">
+                                <label for="selectTipoTrabajador" class="form-label">Tipo Administrador o Común</label>
+                                <select asp-for="tipo_empleado_tipo_empleado_id" class="form-control">
+                                    @foreach (var tipoTrabajador in Model.ListaDeTipoEmpleado)
+                                    {
+                                        <option value="@tipoTrabajador.tipo_empleado_id">@tipoTrabajador.rol_emp</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Agregar</button>
+                                <button type="submit" class="btn btn-danger" formaction="BorrarEmpleado" id="botoneliminar">Eliminar</button>
+                                <button type="submit" class="btn btn-success" formaction="BuscarEmpleado" id="botonBuscar">Buscar</button>
+                                <button type="submit" class="btn btn-dark" formaction="actualizarEmpleado">Actualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Lista de Empleados</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Rut</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellido Paterno</th>
+                                    <th scope="col">Apellido Materno</th>
+                                    <th scope="col">Contraseña</th>
+                                    <th scope="col">ID del Tipo de Trabajador</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ListaDeEmpleados == null || !Model.ListaDeEmpleados.Any())
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center">No hay nada para mostrar</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var trabajador in Model.ListaDeEmpleados)
+                                    {
+                                        <tr>
+                                            <td>@trabajador.rut</td>
+                                            <td>@trabajador.nombre</td>
+                                            <td>@trabajador.apellido_p</td>
+                                            <td>@trabajador.apellido_m</td>
+                                            <td>@trabajador.contra_emp</td>
+                                            <td>@trabajador.tipo_empleado_tipo_empleado_id</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿@model Registro
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRUEBA DE REGISTRO - Proyecto</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 id="encabezadoregistro" class="text-center mb-4">Registros</h1>
+
+        <form asp-action="AdministrarRegistro">
+            <button type="submit" class="btn btn-primary" formaction="FiltrarRegistrosDelDia" id="dia">filtrar por hoy</button>
+            <button type="submit" class="btn btn-primary" formaction="FiltrarRegistrosDelMes">filtrar por mes</button>
+            <button type="submit" class="btn btn-primary" formaction="FiltrarRegistrosTodos">todos los registros</button>
+            <button type="submit" class="btn btn-primary" formaction="FiltrarRegistrosFechaEspecifica">especifica</button>
+            <input placeholder="dia" type="text" name="dia" />
+            <input placeholder="mes" type="text" name="mes" />
+            <input placeholder="año" type="text" name="anio" />
+        </form>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID Registro</th>
+                    <th scope="col">ID Empleado</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido Paterno</th>
+                    <th scope="col">Apellido Materno</th>
+                    <th scope="col">Nombre Espacio</th>
+                    <th scope="col">Fecha Entrada</th>
+                    <th scope="col">Fecha Salida</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ListaDeRegistros == null || !Model.ListaDeRegistros.Any())
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">NO HAY NADA PARA MOSTRAR</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var registro in Model.ListaDeRegistros)
+                    {
+                        <tr>
+                            <td>@registro.id_registro</td>
+                            <td>@registro.id_emp</td>
+                            <td>@registro.nombre</td>
+                            <td>@registro.apellido_p</td>
+                            <td>@registro.apellido_m</td>
+                            <td>@registro.nom_esp</td>
+                            <td>@registro.fecha_entrada.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@registro.fecha_salida.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="~/js/JavaScriptRegistro.js"></script>
+</html>
+
